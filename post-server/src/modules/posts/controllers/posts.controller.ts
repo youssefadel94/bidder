@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { get } from 'http';
 import { PostsService } from '../services/posts.service';
 import { bidDto, filterDto, post } from '../interfaces/post.dto.interface'
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -12,10 +13,12 @@ export class PostsController {
      * @return {*}  {Promise<post[]>}
      * @memberof PostsController
      */
+    @UseGuards(JwtAuthGuard)
     @Get()
     getPosts():Promise<post[]> {
         return this.posts.getPosts();
     }
+    @UseGuards(JwtAuthGuard)
     @Get()
     getSoldPosts(): Promise<post[]> {
         return this.posts.getSoldPosts();
@@ -27,6 +30,7 @@ export class PostsController {
      * @return {*}  {Promise<post>}
      * @memberof PostsController
      */
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     getPost(@Param('id') id: number): Promise<post> {
         // (id == -1)
@@ -34,11 +38,12 @@ export class PostsController {
         // (id != -1)
         return this.posts.getPost(id);
     }
-
+    @UseGuards(JwtAuthGuard)
     @Post()
     makeBid(@Body() bid: bidDto): Promise<post> {
         return this.posts.makeBid(bid);
     }
+    @UseGuards(JwtAuthGuard)
     @Post()
     getPostsFiltered(@Body() filter: filterDto): Promise<post[]> {
         return this.posts.getPostsFiltered(filter);
