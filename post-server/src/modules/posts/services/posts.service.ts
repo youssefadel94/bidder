@@ -42,16 +42,16 @@ export class PostsService {
 
         return await this.PostModel.findOneAndUpdate({ id: bid.post.id }, bid.post, { new: true });
     }
-    // async populate(): Promise<void> {
-    //     this.posts.forEach(post => {
-    //         this.create(post);
-    //     })
-    //     // return this.create(this.posts[1]);
-    // }
-    // async create(post: post): Promise<post> {
-    //     const newPost = new this.PostModel(post);
-    //     return await newPost.save();
-    // }
+    async populate(): Promise<void> {
+        this.posts.forEach(post => {
+            this.create(post);
+        })
+        // return this.create(this.posts[1]);
+    }
+    async create(post: post): Promise<post> {
+        const newPost = new this.PostModel(post);
+        return await newPost.save();
+    }
 
     private readonly posts: post[] = [
         {

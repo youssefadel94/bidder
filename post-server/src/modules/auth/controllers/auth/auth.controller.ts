@@ -4,14 +4,15 @@ import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../../guards/local-auth.guard';
 import { AuthService } from '../../services/auth/auth.service';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    @UseGuards(LocalAuthGuard)
-    @Post('auth/login')
-    async login(@Request() req) {
-        return this.authService.login(req.user);
+    // @UseGuards(LocalAuthGuard) // uncomment this line to use local auth
+    @Post('login')
+    async login(@Request() req) { // use @Body() to get the body of the request
+        // console.log(req);
+        return this.authService.login(req.body.user); // if @Body() used replace the req.body.user with req.user 
     }
 
     @UseGuards(JwtAuthGuard)

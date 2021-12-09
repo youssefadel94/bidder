@@ -1,0 +1,28 @@
+<section class="section container m-auto">
+    <div class="columns m-2 is-scrollable-x">
+        <div class="column is-4">
+            <div class="ng-autocomplete">
+                <ng-autocomplete [placeholder]="search" [data]="posts" [isLoading]="posts?false:true" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                </ng-autocomplete>
+
+                <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.name"></a>
+                </ng-template>
+
+                <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                </ng-template>
+            </div>
+        </div>
+        <div class="column is-4">
+            <input [(ngModel)]="id" name="id" class="input is-primary" type="text" placeholder="get by id">
+            <p class="">{{error}}</p>
+        </div>
+        <div class="column is-4">
+            <div class="buttons">
+                <button [disabled]="!id" class="button is-primary is-light" (click)='getEvent()'>Show</button>
+            </div>
+
+        </div>
+    </div>
+</section>

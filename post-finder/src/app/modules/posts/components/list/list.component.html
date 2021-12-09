@@ -1,0 +1,8 @@
+<app-search-and-find [error]="error" [posts]="autoComplete" (selectChange)="selectChangeHandler($event)"></app-search-and-find>
+<section class="section container m-auto">
+    <div class="columns m-2 is-scrollable-x">
+        <div *ngFor="let post of displayPosts | slice:0:5 ; let i = index;" class="column is-4">
+            <app-list-item-post [post]="post" (selectHandler)="selectChangeHandler($event)"></app-list-item-post>
+        </div>
+    </div>
+</section>

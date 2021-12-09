@@ -6,7 +6,9 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {
-    constructor(private posts: PostsService) { }
+    constructor(private posts: PostsService) {
+        // this.populate();
+    }
     /**
      *get all posts from post service
      * can be only specific data to decrease load and use get post by id 
@@ -18,11 +20,13 @@ export class PostsController {
     getPosts():Promise<post[]> {
         return this.posts.getPosts();
     }
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    getSoldPosts(): Promise<post[]> {
-        return this.posts.getSoldPosts();
-    }
+
+    // @UseGuards(JwtAuthGuard)
+    // @Get()
+    // getSoldPosts(): Promise<post[]> {
+    //     return this.posts.getSoldPosts();
+    // }
+
     /**
      *get post by id 
      *
@@ -43,11 +47,19 @@ export class PostsController {
     makeBid(@Body() bid: bidDto): Promise<post> {
         return this.posts.makeBid(bid);
     }
+    // @UseGuards(JwtAuthGuard)
+    // @Post()
+    // getPostsFiltered(@Body() filter: filterDto): Promise<post[]> {
+    //     return this.posts.getPostsFiltered(filter);
+    // }
     @UseGuards(JwtAuthGuard)
-    @Post()
+    @Post('filter')
     getPostsFiltered(@Body() filter: filterDto): Promise<post[]> {
         return this.posts.getPostsFiltered(filter);
     }
-    
+    @Get('migrate')
+    populate(): Promise<void> {
+        return this.posts.populate();
+    }
 }
 
