@@ -9,8 +9,8 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.usersService.findOne(username);
+    validateUser(username: string, pass: string) {
+        const user = this.usersService.findOne(username);
         if (user && user.password === pass) {
             const { password, ...result } = user;
             return result;
@@ -20,8 +20,19 @@ export class AuthService {
 
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
+        console.log(this.validateUser(user.username, user.password));
+        
+            if (this.validateUser(user.username, user.password))
+                return {
+                    access_token: this.jwtService.sign(payload),
+                    status: "success",
+                }
+            else
+                return {
+                    access_token: null,
+                    status: "not found",
+                };
+        
+        
     }
 }

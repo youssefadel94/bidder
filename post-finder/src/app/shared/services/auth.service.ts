@@ -30,12 +30,18 @@ export class AuthService {
       { user: { "username": email, "password": password } }
     ).subscribe(data => {
       // console.log(data);
+      if (data.status === 'success') {
       this.token = data.access_token;
       this.setUserInfo({ "username": email, "password": password }, this.token);
-      this.router.navigate(['/posts']);
+        this.router.navigate(['/posts']);
+      }
+      else {
+        alert(data.status);
+      }
     })
   }
   signOut() {
     localStorage.clear();
+    this.router.navigate(['/auth/login']);
   }
 }

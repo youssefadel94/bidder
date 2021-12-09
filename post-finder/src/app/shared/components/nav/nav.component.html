@@ -13,7 +13,7 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item">
+            <!-- <a class="navbar-item">
                 Home
             </a>
 
@@ -41,18 +41,18 @@
                         Report an issue
                     </a>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="navbar-end">
             <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-primary">
-                        <strong>Sign up</strong>
+                <div class="buttons" (click)="signOut()">
+                    <a class="button is-danger">
+                        <strong>Sign out</strong>
                     </a>
-                    <a class="button is-light">
+                    <!-- <a class="button is-light">
                         Log in
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
