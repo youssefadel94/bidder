@@ -8,8 +8,16 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/services/auth/auth.service';
 import config from './config/keys'
 import { UserService } from './modules/user/services/user/user.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './config/const';
 @Module({
-  imports: [PostsModule, MongooseModule.forRoot(config.mangoURI), AuthModule, UserModule],
+  imports: [
+    MongooseModule.forRoot(config.mangoURI),
+    JwtModule.register({
+    secret: jwtConstants.secret,
+    signOptions: { expiresIn: '2 days' },
+    }),
+    AuthModule, UserModule, PostsModule,],
   controllers: [AppController],
   providers: [AppService, AuthService, UserService],
 })

@@ -48,4 +48,6 @@ export class PostsController {
     getPostsFiltered(@Body() filter: filterDto): Promise<post[]> {
         return this.posts.getPostsFiltered(filter);
     }
+    
 }
+
