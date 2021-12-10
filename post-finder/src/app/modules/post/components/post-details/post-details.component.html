@@ -50,14 +50,31 @@
                     <button (click)='bidEvent(bid)' class="button is-primary is-light my-2">
                         place bid </button>
 
-                    <label class="checkbox">
-                            <input [(ngModel)]="bot" type="checkbox" (click)="botEvent($event)">
-                            Activate Bot
-                        </label>
+                    <label class="checkbox column is-11">
+                            <input [(ngModel)]="botChecked" type="checkbox" (click)="botEvent($event)">
+                            Activate 
+                        </label><b style="cursor: pointer" (click)="showBot()">Bot</b>
                 </div>
             </div>
         </div>
 
 
+        <div class="columns" *ngIf="botShow">
+            <div class="column is-5">
+                <!-- <img class="image " style="width:100%" src="assets/img/img.jpg"> -->
+            </div>
+            <div class="column m-4 is-padded is-7">
+
+                <div class="content">
+                    <!-- <span id="disc">{{post.body}}</span> -->
+                    <input class="input is-primary" [(ngModel)]="bot.limit" type="number" min="0" placeholder="Primary input">
+                    <input class="input is-primary" [(ngModel)]="bot.alert" type="number" min="0" max="100" placeholder="Primary input">
+                    <button (click)='botUpdateEvent(bot)' class="button is-primary is-light my-2">
+                        Update Bot </button>
+
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>

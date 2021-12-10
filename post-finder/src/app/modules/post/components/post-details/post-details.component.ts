@@ -16,10 +16,12 @@ export class PostDetailsComponent implements OnInit {
   };
   bid: number = 0;
   @Input() bot: any;
-  botChecked = false;
+  @Input() botChecked: any;
   @Output() backButton = new EventEmitter();
   @Output() bidButton = new EventEmitter();
   @Output() botButton = new EventEmitter();
+  @Output() botUpdateEventButton = new EventEmitter();
+  botShow = false;
   constructor() { }
 
   ngOnInit(): void {
@@ -34,5 +36,11 @@ export class PostDetailsComponent implements OnInit {
   }
   botEvent(event: any) {
     this.botButton.emit(event);
+  }
+  showBot() {
+    this.botShow = !this.botShow;
+  }
+  botUpdateEvent(bot: any) {
+    this.botUpdateEventButton.emit(bot);
   }
 }

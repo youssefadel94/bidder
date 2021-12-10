@@ -30,7 +30,7 @@ export class PostsService {
     return bot;
   }
   makeBot(bot: bot) {
-    return this.http.post(`${environment.serverURL}${environment.bot}/`, bot);
+    return this.http.post(`${environment.serverURL}${environment.bot}`, bot);
   }
 
   /**

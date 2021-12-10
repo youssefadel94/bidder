@@ -67,8 +67,8 @@ export class AuthService {
     })
   }
   setBot() {
-    this.http.get<any>(
-      `${environment.serverURL}${environment.endPoint}/getBot`,
+    this.http.post<any>(
+      `${environment.serverURL}${environment.endPoint}/getBot`, { user: { userId: this.user.id, userName: this.user.username }},
       { headers: { 'Authorization': `Bearer ${this.token}` } }
     ).subscribe(data => {
       localStorage.setItem('bot', JSON.stringify(data));

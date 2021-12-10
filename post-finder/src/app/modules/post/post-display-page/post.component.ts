@@ -49,6 +49,7 @@ export class PostComponent implements OnInit {
     });
   }
   placeBot(item: any) {
+    debugger
     if (item.target.value) {
       this.bot.posts.push(this.post);
       this.Posts.makeBot(this.bot)
@@ -56,6 +57,9 @@ export class PostComponent implements OnInit {
       this.bot.posts.splice(this.bot.posts.indexOf(this.post.id), 1);
       this.Posts.makeBot(this.bot)
     }
+  }
+  updateBot(bot:any) {
+    this.Posts.makeBot(bot);
   }
   ngOnDestroy() {
     this.Posts.closePostSnapshot();
