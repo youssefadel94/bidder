@@ -2,8 +2,8 @@ this project is build using nestJS for back end and angular for front end
 
 an instance of mongoose DB is the database used for the mock data
 
-running start.bat will npm i in both finder and server directory
-then start applications (ng serve)(npm run start) on localhost 
+running "npm i" in both finder and server directory
+then start applications by running both commands in corresponding directory  (ng serve)(npm run start) on localhost 
 
 back end is on port :3000
 front end is on port :4200
