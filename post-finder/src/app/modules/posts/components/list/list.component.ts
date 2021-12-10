@@ -12,7 +12,10 @@ export class ListComponent implements OnInit {
   @Input() displayPosts: Post[] = [];
   @Input() autoComplete!: any;
   @Input() error = "";
+  @Input() categories: any;
+  @Input() minMax = {min:0, max:0};
   @Output() selectChange = new EventEmitter();
+  @Output() filter = new EventEmitter();
   
   constructor() { }
 
@@ -24,4 +27,10 @@ export class ListComponent implements OnInit {
     
     this.selectChange.emit( item );}
 
+  filterHandler(item: any) {
+    this.filter.emit( item );
+  }
+  identify(index: any, item: { category: any; }) {
+    return item.category;
+  }
 }

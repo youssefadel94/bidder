@@ -14,12 +14,25 @@ export class PostDetailsComponent implements OnInit {
     createdAt: new Date(), updatedAt: new Date(),
     expiryDate: new Date(), category: ''
   };
+  bid: number = 0;
+  @Input() bot: any;
+  botChecked = false;
   @Output() backButton = new EventEmitter();
+  @Output() bidButton = new EventEmitter();
+  @Output() botButton = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
+
+
   }
   navigateBack() {
     this.backButton.emit();
+  }
+  bidEvent(bid: number) {
+    this.bidButton.emit(bid);
+  }
+  botEvent(event: any) {
+    this.botButton.emit(event);
   }
 }

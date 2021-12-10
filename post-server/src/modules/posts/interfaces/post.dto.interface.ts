@@ -22,10 +22,20 @@ export interface post {
     expiryDate: Date;
     category: string;
 }
+export interface bot {
+    id: number;
+    userId: number;
+    userName: string;
+    limit: number;
+    posts: post[];
+    alert: number;
+    reserved: number;
+}
 export interface bidDto {
     userId: number;
     amount: number;
     post: post;
+    userName: string;
 }
 export interface filterDto {
     status: "open";

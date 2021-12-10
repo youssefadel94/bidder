@@ -19,6 +19,15 @@ export interface bidDto {
     amount: number;
     post: Post;
 }
+export interface bot {
+    id: number;
+    userId: number;
+    userName: string;
+    limit: number;
+    posts: Post[];
+    alert: number;
+    reserved: number;
+}
 export interface filterDto {
     status: "open";
     bid: { $gte: number };

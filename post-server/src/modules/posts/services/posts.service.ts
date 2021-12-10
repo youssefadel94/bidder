@@ -1,28 +1,118 @@
 import { Injectable } from '@nestjs/common';
-import { bidDto, filterDto, post } from '../interfaces/post.dto.interface';
+import { bidDto, bot, filterDto, post } from '../interfaces/post.dto.interface';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PostsService {
-    getPostsFiltered(filter: filterDto): Promise<post[]> {
-        return this.PostModel.find(filter).exec();
-    }
-    constructor(@InjectModel('Post') private readonly PostModel: Model<post>) { }
 
+
+    constructor(@InjectModel('Post') private readonly PostModel: Model<post>) { }
+    post: post[] = [];
+    bots: bot[] = [];
+    makeBidBot(bot: bot): bot {
+        // check if this.bots includes bot using the userName parameter
+        // if not, add it
+        // if it does, check if the limit is higher than the current 
+        // if it is, update the bot with the new limit
+        // if it is not, do nothing and return the bot
+        let botIndex = this.bots.findIndex(item => item.userName === bot.userName);
+        if (botIndex === -1) {
+            this.bots.push(bot);
+        } else {
+            if (this.bots[botIndex].limit < bot.limit) {
+                this.bots[botIndex].limit = bot.limit;
+            }
+            //check if this.bots[botIndex].posts doesn't contains all of the posts in bot.posts
+            //if it doesn't, add that post to the this.bots[botIndex].posts
+            //if it does, do nothing
+            this.bots[botIndex].posts.forEach(post => {
+                if (!this.bots[botIndex].posts.includes(post)) {
+                    this.bots[botIndex].posts.push(post);
+                }
+            })
+            // if (this.bots[botIndex].posts.length < bot.posts.length) {
+            //     this.bots[botIndex].posts = bot.posts;
+            // }
+            
+            return this.bots[botIndex]
+        }
+        return null;
+    }
+    runBitBots(post : post, currentBid: number, userId) {
+        this.bots.forEach(bot => {
+            let biding = this.isBotBiding(post.id, bot);
+            if (biding && bot.userId!==userId) {
+                let bid = {
+                    userId: bot.userId,
+                    post: post,
+                    amount: currentBid + 1,
+                    userName: bot.userName
+                }
+            this.makeBid(bid)
+            }
+        })
+    }
+    
+    isBotBiding(postId: number, bot: bot): number {
+//check if bot.posts contains postId in post.id
+//if it does, return true
+//if it does not, return false
+        let postIndex = bot.posts.findIndex(item => item.id === postId);
+        if (postIndex === -1) {
+            return null;
+        } else {
+            return postIndex;
+        }
+    }
+
+    getBot(userId,username): bot {
+        let botIndex = this.bots.findIndex(item => item.userId === userId);
+        if (botIndex === -1) {
+            let bot = {
+                
+                id: 0,
+                userId:0,
+                userName: username,
+                limit: 0,
+                posts: [],
+                alert: 0,
+                reserved: 0,
+            }
+            return bot;
+        } else {
+            return this.bots[botIndex];
+        }
+    }
+        
     /**
      *get posts from the db
      *
      * @return {*}  {Promise<post[]>}
      * @memberof PostsService
      */
+    cachePosts($subject: BehaviorSubject<post[]>) {
+        this.getPosts().then(posts => {
+            this.post = posts;
+            $subject.next(posts);
+        })
+    }
     async getPosts(): Promise<post[]> {
         // return this.posts;
-        return await this.PostModel.find({ status: 'open' }).exec();;
+        return await this.PostModel.find({ status: 'open' }).exec();
+    }
+    getChachedPosts(): post[] {
+        return this.post;
     }
     async getSoldPosts(): Promise<post[]> {
         // return this.posts;
-        return await this.PostModel.find({ status: 'closed' }).exec();;
+        return await this.PostModel.find({ status: 'closed' }).exec();
+    }
+    getPostsFiltered(filter: filterDto): Promise<post[]> {
+        console.log(filter);
+        
+        return this.PostModel.find(filter).exec();
     }
     /**
      *get post from db by id
@@ -40,7 +130,10 @@ export class PostsService {
         bid.post.bids.push(bid.amount);
         bid.post.currentBid = bid.amount;
 
-        return await this.PostModel.findOneAndUpdate({ id: bid.post.id }, bid.post, { new: true });
+         
+        let post = await this.PostModel.findOneAndUpdate({ id: bid.post.id }, bid.post, { new: true });
+        this.runBitBots(bid.post, bid.amount, bid.userId);
+        return post
     }
     async populate(): Promise<void> {
         this.posts.forEach(post => {

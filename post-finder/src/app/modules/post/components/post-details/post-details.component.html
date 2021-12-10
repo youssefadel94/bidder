@@ -4,16 +4,60 @@
 </div>
 <div class="card">
     <div class="card-content">
-        <div class="media">
-            <div class="media-content">
-                <p id="title" class="title is-4">{{post.title}}</p>
-                <p id="price" class="subtitle is-6">id: {{post.id}}</p>
+        <div class="columns">
+            <div class="column is-7">
+                <img class="image " style="width:100%" src="assets/img/img.jpg">
+            </div>
+            <div class="column m-4 is-padded is-5">
+                <h1 class="title m-4 is-padded is-3">{{post.title}}</h1>
+                <P class="m-4 is-padded is-2">min bid {{post.startingBid}}</P>
+                <div class="media">
+                    <div class="media-content">
+                        <p class="m-4 is-padded ">Details</p>
+                        <p id="title" class=" m-4 is-padded is-4">{{post.body}}</p>
+                        <!-- <p id="price" class="subtitle m-4 is-padded is-6">id: {{post.id}}</p> -->
+                        <div class="columns">
+                            <!-- <div class="column">
+                                First column
+                            </div>
+                            <div class="column">
+                                Second column
+                            </div>
+                            <div class="column">
+                                Third column
+                            </div>
+                            <div class="column">
+                                Fourth column
+                            </div> -->
+
+
+                            <div class="column m-4 is-padded ">
+                                <p class="subtitle m-4 title is-padded is-5">last bid</p>
+                                <p class="subtitle m-4 is-padded is-6">{{post.currentBid}}</p>
+
+                            </div>
+                            <div class="column m-4 is-padded">
+                                <p class="subtitle m-4 title is-padded is-5">available until</p>
+                                <p class="subtitle m-4 is-padded is-6">{{post.expiryDate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- <span id="disc">{{post.body}}</span> -->
+                    <input class="input is-primary" [(ngModel)]="bid" type="number" min="{{post.currentBid +1}}" placeholder="Primary input">
+                    <button (click)='bidEvent(bid)' class="button is-primary is-light my-2">
+                        place bid </button>
+
+                    <label class="checkbox">
+                            <input [(ngModel)]="bot" type="checkbox" (click)="botEvent($event)">
+                            Activate Bot
+                        </label>
+                </div>
             </div>
         </div>
 
-        <div class="content">
-            <span id="disc">{{post.body}}</span>
 
-        </div>
     </div>
 </div>

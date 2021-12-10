@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Sse, UseGuards } from '@nestjs/common';
 import { get } from 'http';
 import { PostsService } from '../services/posts.service';
-import { bidDto, filterDto, post } from '../interfaces/post.dto.interface'
+import { bidDto, filterDto, post, bot } from '../interfaces/post.dto.interface'
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { BehaviorSubject, interval, map, Observable } from 'rxjs';
 
 @Controller('posts')
 export class PostsController {
+    $subject = new BehaviorSubject<post[]>([]);
     constructor(private posts: PostsService) {
         // this.populate();
     }
@@ -17,7 +19,7 @@ export class PostsController {
      */
     @UseGuards(JwtAuthGuard)
     @Get()
-    getPosts():Promise<post[]> {
+    getPosts(): Promise<post[]> {
         return this.posts.getPosts();
     }
 
@@ -45,7 +47,21 @@ export class PostsController {
     @UseGuards(JwtAuthGuard)
     @Post()
     makeBid(@Body() bid: bidDto): Promise<post> {
-        return this.posts.makeBid(bid);
+        let post = this.posts.makeBid(bid);
+        post.then(() => {
+            this.posts.cachePosts(this.$subject);
+        })
+        return post;
+    }
+    @UseGuards(JwtAuthGuard)
+    @Post('/makeBot')
+    makeBidBot(@Body() bot: bot): bot {
+        return this.posts.makeBidBot(bot);
+    }
+    @UseGuards(JwtAuthGuard)
+    @Post('/getBot')
+    getBidBot(@Body() user: {userId:number, userName:string}): bot {
+        return this.posts.getBot(user.userId, user.userName);
     }
     // @UseGuards(JwtAuthGuard)
     // @Post()
@@ -60,6 +76,11 @@ export class PostsController {
     @Get('migrate')
     populate(): Promise<void> {
         return this.posts.populate();
+    }
+    // @UseGuards(JwtAuthGuard) 
+    @Sse('sse')
+    sse(): Observable<post[]> {
+        return this.$subject.asObservable()
     }
 }
 

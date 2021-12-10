@@ -1,3 +1,7 @@
 .m-2 {
     margin: 0.5rem;
 }
+
+.is-padded {
+    padding: 10px;
+}
